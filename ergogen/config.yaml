@@ -723,4 +723,3 @@ pcbs:
       #   where: 
       #     ref: mirror_mcu
       #     shift: [-mcu_y/2 -22,  -2]
-      #
