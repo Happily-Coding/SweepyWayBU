@@ -1,0 +1,85 @@
+(rules PCB corney_island
+  (snap_angle 
+    fortyfive_degree
+  )
+  (autoroute_settings
+    (fanout off)
+    (autoroute on)
+    (postroute on)
+    (vias on)
+    (via_costs 50)
+    (plane_via_costs 5)
+    (start_ripup_costs 100)
+    (start_pass_no 1)
+    (layer_rule F.Cu
+      (active on)
+      (preferred_direction vertical)
+      (preferred_direction_trace_costs 1.0)
+      (against_preferred_direction_trace_costs 2.5)
+    )
+    (layer_rule B.Cu
+      (active on)
+      (preferred_direction horizontal)
+      (preferred_direction_trace_costs 1.0)
+      (against_preferred_direction_trace_costs 1.7)
+    )
+  )
+  (rule
+    (width 150.0)
+    (clearance 200.1)
+    (clearance 75.0 (type smd_to_turn_gap))
+    (clearance 75.0 (type pad_to_turn_gap))
+    (clearance 50.0 (type smd))
+    (clearance 200.0 (type "kicad_default"))
+    (clearance 200.0 (type "power_ground"))
+  )
+  (padstack "Via[0-1]_560:300_um"
+    (shape
+      (circle F.Cu 560.0 0.0 0.0)
+    )
+    (shape
+      (circle B.Cu 560.0 0.0 0.0)
+    )
+    (attach off)
+  )
+  (via 
+    "Via[0-1]_560:300_um" "Via[0-1]_560:300_um" default
+  )
+  (via 
+    "Via[0-1]_560:300_um-kicad_default" "Via[0-1]_560:300_um" "kicad_default"
+  )
+  (via 
+    "Via[0-1]_560:300_um-power_ground" "Via[0-1]_560:300_um" "power_ground"
+  )
+  (via_rule
+    default "Via[0-1]_560:300_um"
+  )
+  (via_rule
+    "kicad_default" "Via[0-1]_560:300_um-kicad_default"
+  )
+  (via_rule
+    "power_ground" "Via[0-1]_560:300_um-power_ground"
+  )
+  (class default
+    (clearance_class default)
+    (via_rule default)
+    (rule
+      (width 150.0)
+    )
+    (circuit 
+      (use_layer F.Cu B.Cu)
+    )
+  )
+  (class "power_ground"
+    RAW GND VCC "BAT_P" "JST_1" "JST_2"
+    (clearance_class "kicad_default")
+    (via_rule "kicad_default")
+    (rule
+      (width 250.0)
+      (clearance 200.0)
+    )
+    (circuit 
+      (use_layer F.Cu B.Cu)
+    )
+  )
+)

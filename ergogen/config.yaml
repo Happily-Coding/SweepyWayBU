@@ -1,0 +1,725 @@
+meta:
+  engine: 4.1.0
+  name: SweepyWay
+  version: &kb_version v0.2
+  author: Happily-Coding
+  url: &kb_url https://github.com/Happily-Coding/SweepyWay/
+
+  # These presets provide different layout options
+  # Select a preset in the `units` section below
+presets:
+  choc:
+    # Standard Choc spacing
+    kx: 17 # spacing between key ccol7s (X-axis)
+    ky: 18 # spacing between key ccol7s (Y-axis)
+    px: 3.5 #How much to pad horizontally
+    py: 3.5 #how much to pad vertically
+    plate_kx: 13.8 # key cutout hole width (cherry, choc v2: 14, choc v1: 13.8)
+    plate_ky: 13.8 # key cutout hole height (cherry, choc v2: 14, choc v1: 13.8)
+    keycap_x_1u: 17.5
+    keycap_y_1u: 16.5
+    keycap_x_1_5u: cx * 1.5 - 0.5 
+    keycap_x_1_5u_span: cx*1.25
+    vertical_diode_shift: 1.5 # How much to shift to avoid overlap
+    horizontal_diode_shift: -0.5 plate_kx - 0.85
+    diode_rotation: -180 # Diode rotation
+    switch_rotation: 180 # Hotswap south, led north
+  cfx:
+    # CFX 1u are 15.5x15x5 keys for a tighter 17x17 matrix.  This is an idealised grid as to my knowledge no 1.5u keycaps exist for that size
+    $extends: presets.choc
+    kx: 17 # spacing between key ccol7s (X-axis)
+    ky: 17 # spacing between key ccol7s (Y-axis)
+    keycap_x_1u: 16.5
+  chocfox_wob:
+    # ChocFox WOB 1u are CFX. However the larger keys don't work on that grid.
+    $extends: presets.cfx
+    keycap_x_1_5u: 26
+    keycap_x_1_5u_span: 13.25 + kx/2
+
+
+units:
+  $extends: presets.chocfox_wob
+
+  # Physical measures
+  screw_radius: 1.1 # M2 screws
+  screw_diameter: screw_radius * 2
+  screw_head_radius: 2.05
+  screw_head_diameter: screw_head_radius * 2
+  spacer_radius: 2.15 # M2 standoffs
+  spacer_diameter: spacer_radius * 2
+  fillet_radius: 0.5
+  via_size: 0.56 # JLCPCB min 0.56 | KiCad default 0.8
+  via_drill: 0.3 # JLCPCB min 0.3 | KiCad default 0.4
+
+  # Case variables
+  case_wall_thickness: 1.2
+  pcb_to_case_wall_tolerance: 0.25
+  bottom_plate_thickness: 1.0
+  top_plate_thickness: 1.6
+  internal_distance_between_plates: 4
+
+  # Font units
+  font_x: 1
+  font_y: 1
+  font_xo: 0.5 font_x
+  font_yo: 0.5 * font_y
+
+  # Nice Nano
+  mcu_spacing_x: 2.72
+  mcu_x: 17.78 + mcu_spacing_x
+  mcu_y: 33.02
+  mcu_xo: 0.5 * mcu_x
+  mcu_yo: 0.5 * mcu_y  
+
+  # Nice!View display
+  disp_x: 14
+  disp_y: 36
+  disp_jumper_y: 2.6
+  disp_xo: 0.5 * disp_x
+  disp_yo: 0.5 * disp_y
+
+  # Battery Connector
+  batc_x: 4.3
+  batc_y: 4.6
+  batc_xo: 0.5 * batc_x
+  batc_yo: 0.5 * batc_y
+
+  # Battery Pads
+  batp_x: 3.75
+  batp_y: 2.5
+  batp_xo: 0.5 * batp_x
+  batp_yo: 0.5 * batp_y
+
+  # Power Switch
+  sw_power_x: 3.1
+  sw_power_y: 8.3
+  sw_power_xo: 0.5 * sw_power_x
+  sw_power_yo: 0.5 * sw_power_y
+
+  # Reset Switch
+  sw_reset_x: 3.4
+  sw_reset_y: 5
+  sw_reset_xo: 0.5 * sw_reset_x
+  sw_reset_yo: 0.5 * sw_reset_y
+
+  #ncu bumps
+  controller_bump_x: 3kx
+  controller_bump_y: mcu_x 
+  controller_bump_shift: kx
+  
+  controller_area_y_pad: 11
+
+points:
+  key:
+    padding: ky
+    spread: kx
+    width: keycap_x_1u
+    height: keycap_x_1u
+    mirror: #When they are mirrored tag them with test
+      tags: ["key", "rightkey"]
+  zones:
+    matrix:
+      # Fix placement on KiCAD sheet.
+      anchor:
+        shift: [35, -150]
+      key.tags: [
+        "key",
+        "leftkey"
+        ] #When keys are not mirrored tag them with key, right
+      columns:
+        col1:
+          key.column_net: C1
+          key.stagger: 0
+          rows:
+            row5:
+              skip: true
+        col2:
+          key.column_net: C2
+          key.stagger: 0.25 ky
+        col3:
+          key.column_net: C3
+          key.stagger: 0.66 ky
+        col4:
+          key.column_net: C4
+          key.stagger: -0.25 ky
+          rows:
+            row5:
+              skip: true
+        col5:
+          key.column_net: C5
+          key.stagger: -0.15 ky
+          rows:
+            row5:
+              skip: true
+        col6:
+          key.column_net: C6
+          key.stagger: -0.2 ky
+          rows:
+            row5:
+              skip: true
+        col7:
+          key.column_net: C7
+          key.stagger: .2 ky
+          rows:
+            row1:
+              skip: true
+            row5:
+              skip: true
+      rows:
+        row5:
+          row_net: R5
+        row4:
+          row_net: R4
+        row3:
+          row_net: R3
+        row2:
+          row_net: R2
+        row1:
+          row_net: R1
+      mirror:
+        #shift: [35, -150]
+        distance: 340
+
+    thumbfan:
+      key.tags: ["key", "leftkey"] #When keys are not mirrored tag them with key, right
+      anchor:
+        ref: matrix_col6_row4
+        shift: [-0.66 kx, -1 ky]
+        rotate: -10
+      columns:
+        col1:
+          key:
+            spread: kx
+            column_net: col_index
+        col2:
+          key:
+            spread: kx
+            splay: -15
+            origin: [-0.5 kx, -0.5 ky]
+            column_net: col_inner
+        col3:
+          key:
+            spread: kx
+            splay: -5
+            origin: [-0.5 kx, -0.5 ky]
+            column_net: col_extra_inner
+      rows:
+        thumb_row_1:
+          row_net: R5
+      mirror:
+        ref: matrix_col6_row4
+        distance: 100
+        #200 #mirrors 200 away from the other cluster which isnt right
+
+    controller:
+      anchor:
+        ref: matrix_col6_row2
+        shift: [-0.5*kx - mcu_y/2, 0.5 ky + mcu_x/2 + controller_area_y_pad + ky]
+      key:
+        name: mcu
+        width: mcu_y
+        height: mcu_x
+        tags: ["controller", "leftcontroller"]
+        mirror.tags: ["controller", "rightcontroller"]
+      mirror:
+        ref: matrix_col6_row2
+        distance: 100
+      #mirror: 200 #Mirrors 200 away from the controller which isnt right
+
+  #Creates the mirror for the entire matrix x units way from the ref
+  #mirror: 200 #&mirror
+    #ref: matrix_col7_row2
+    #shift: [0, + ky]
+    #distance: 100
+    #key.tags: [key,mirrorkey]
+
+outlines:
+  l_key_based_board_outline:
+    - what: rectangle
+      where: leftkey
+      #asym: source
+      size: [kx + px, ky + py]
+      #corner: px #Havig it set to 3.5 (while px was 3.5) made ergogen create a huge arc for some reason. it did not happen with other decimals, nor 3, nor 4
+      corner: 3
+
+  r_key_based_board_outline:
+    - what: rectangle
+      where: rightkey
+      #asym: source
+      size: [kx + px, ky + py]
+      corner: 3
+      #corner: px #Havig it set to this value made ergogen create a huge arc for some reason.
+
+
+  l_thumb_suplementary_outline:
+    - what: polygon
+      points:
+        - ref: matrix_col6_row4
+          shift: [0.5 kx + 0.5px, -0.5 ky + 0.5 py]
+        - ref: thumbfan_col3_thumb_row_1
+          shift: [0.5 kx - 0.5px, 0.5 ky + 0.5 py]
+        - ref: thumbfan_col3_thumb_row_1
+          shift: [0.5 kx - 0.5px, -0.5 ky - 0.5 py]
+        - ref: thumbfan_col1_thumb_row_1
+          shift: [-0.5 kx + 0.5 px, -0.5 ky - 0.5 py]
+        - ref: matrix_col2_row4
+          shift: [0.5 kx - 0.5 py, -0.5 ky - 0.5 py]
+        - ref: matrix_col2_row3
+        - ref: matrix_col6_row3
+
+  r_thumb_suplementary_outline:
+    - what: polygon
+      points:
+        - ref: mirror_matrix_col6_row4
+          shift: [0.5 kx + 0.5px, -0.5 ky + 0.5 py]
+        - ref: mirror_thumbfan_col3_thumb_row_1
+          shift: [0.5 kx - 0.5px, 0.5 ky + 0.5 py]
+        - ref: mirror_thumbfan_col3_thumb_row_1
+          shift: [0.5 kx - 0.5px, -0.5 ky - 0.5 py]
+        - ref: mirror_thumbfan_col1_thumb_row_1
+          shift: [-0.5 kx + 0.5 px, -0.5 ky - 0.5 py]
+        - ref: mirror_matrix_col2_row4
+          shift: [0.5 kx - 0.5 py, -0.5 ky - 0.5 py]
+        - ref: mirror_matrix_col2_row3
+        - ref: mirror_matrix_col6_row3
+
+
+  l_all_key_clusters_outline:
+    - "+l_key_based_board_outline"
+    - "+l_thumb_suplementary_outline"
+
+  r_all_key_clusters_outline:
+    - "+r_key_based_board_outline"
+    - "+r_thumb_suplementary_outline"
+
+
+  l_keys_outline:
+    - what: rectangle
+      where: [[leftkey, -space]]
+      size: [plate_kx/2, plate_ky/2]
+
+  r_keys_outline:
+    - what: rectangle
+      where: [[rightkey, -space]]
+      size: [plate_kx/2, plate_ky/2]
+
+  l_controller_area:
+    - what: rectangle
+      where: leftcontroller
+      size: [70, 42]
+
+  r_controller_area:
+    - what: rectangle
+      where: rightcontroller
+      size: [70, 42]
+
+  l_pcb_outline:
+    - "+l_key_based_board_outline"
+    - "+l_thumb_suplementary_outline"
+    - "+l_controller_area"
+
+  r_pcb_outline:
+    - "+r_key_based_board_outline"
+    - "+r_thumb_suplementary_outline"
+    - "+r_controller_area"
+
+  l_cover_outline:
+    - name: l_all_key_clusters_outline
+    - operation: subtract
+      name: l_keys_outline
+
+  r_cover_outline:
+    - name: r_all_key_clusters_outline
+    - operation: subtract
+      name: r_keys_outline
+
+
+  l_bottom_plate_outline:
+    - name: l_pcb_outline
+
+  r_bottom_plate_outline:
+    - name: r_pcb_outline
+
+
+
+  # Combination preview showing outline and keys.
+  #combined:
+  #  - name: r_cover_outline
+    # - operation: stack
+    #   name: right_cover_outline
+
+
+pcbs:
+  plate_right:
+    template: kicad8
+    outlines:
+      right:
+        outline: r_cover_outline
+    footprints:
+      jlc:
+        what: ceoloide/utility_text
+        params:
+          text: JLCJLCJLCJLC
+          side: B
+          mirrored: true
+        adjust:
+          shift: [0, 6]
+        where: 
+          - [/^mirror.*/, key, -1_5u, space]
+      url:
+        what: ceoloide/utility_text
+        params:
+          text: *kb_url
+        adjust:
+          shift: [0,-6]
+        where: 
+          - [/^mirror.*/, key, -1_5u, space]
+  plate_left:
+    template: kicad8
+    outlines:
+      right:
+        outline: l_cover_outline
+    footprints:
+      url:
+        what: ceoloide/utility_text
+        params:
+          text: *kb_url
+        adjust:
+          shift: [0,-6]
+        where: 
+          - [ key, -1_5u, space]
+      jlc:
+        what: ceoloide/utility_text
+        params:
+          text: JLCJLCJLCJLC
+          side: B
+          mirrored: true
+        adjust:
+          shift: [0, 6]
+        where: 
+          - [ key, -1_5u, space]
+  left_pcb:
+    template: kicad8
+    outlines:
+      left:
+        outline: l_pcb_outline
+    footprints:
+      choc:
+        what: ceoloide/switch_choc_v1_v2
+        where:
+          - [/^matrix_.*/, key, -1_5u]
+          - [ leftkey, -space]
+        params:
+          include_keycap: true
+          choc_v2_support: false
+          #          solder: true
+          reversible: false
+          hotswap: true
+          keycap_width: 16.5
+          keycap_height: 16.5
+          from: "{{colrow}}"
+          to: "{{column_net}}"
+      choc_space:
+        what: ceoloide/switch_choc_v1_v2
+        where: 
+          - [ leftkey, -1_5u, space]
+
+        params:
+          include_keycap: true
+          choc_v2_support: false
+          #solder: true
+          reversible: false
+          hotswap: true
+          keycap_width: keycap_x_space
+
+          keycap_height: 16.5
+          from: "{{colrow}}"
+          to: "{{column_net}}"
+      diode:
+        what: ceoloide/diode_tht_sod123
+        where:
+          - /^matrix_.*/
+          - /leftcluster_.*/
+        params:
+          from: "{{colrow}}"
+          to: "{{row_net}}"
+          side: F
+          include_tht: false
+          reversible: false
+        adjust:
+          shift: [horizontal_diode_shift,vertical_diode_shift]
+          rotate: 90 + diode_rotation
+
+      promicro:
+        what: ceoloide/mcu_nice_nano
+        params:
+          reverse_mount: true
+          include_extra_pins: true
+          # Pin Assignments (Controller on top facing down)
+          # Right Side
+          P0: "DPD" # Display Data
+          P1: "DPC" # Display Clock
+          # GND
+          # GND
+          P2: "DPE" # Display CS (nice!view only) FIXME? ZPM default?
+          P3: "R2" # Row
+          P4: "R3" # Row
+          P5: "R4" # Row
+          P6: "R5" # Row
+          P7: "R5" # Row
+          P8: "R6" # Row
+          P9: "R7" # Row
+
+          # Left Side
+          # RAW:      # Battery Pos
+          # GND       # Ground / Battery Neg
+          # RST       # Reset pin
+          # VCC       # External Power
+          P21: "C1" # Column
+          P20: "C2" # Column
+          P19: "C3" # Column
+          P18: "C4" # Column
+          P15: "C5" # Column
+          P14: "C6" # Column
+          P16: "C7" # Column
+#          P10: "F10" # Free
+        adjust:
+          rotate: 270
+        where:
+          ref: mcu
+      display:
+        what: ceoloide/display_nice_view
+        params:
+          MOSI: DPD
+          SCK: DPC
+          CS: DPE
+        adjust:
+          rotate: 270
+        where:
+          ref: mcu
+          shift: [-1.5, 0] # Move the display down a bit to be sure the cable fits between the headers
+      pads_bat:
+        what: ceoloide/battery_connector_jst_ph_2
+        params:
+        where:
+          ref: mcu
+          shift: [-mcu_y/2 -7,-7]
+          rotate: 180
+      reset:
+        what: ceoloide/reset_switch_tht_top
+        params:
+          side: B
+          from: GND
+          to: RST
+        adjust:
+          rotate: 90
+        where:
+          ref: mcu
+          shift: [-mcu_y/2 -14, -0]
+      power:
+        what: ceoloide/power_switch_smd_side
+        params:
+          side: B
+          #          from: GND
+          #          to: RST
+        adjust:
+          rotate: 90
+        where:
+          ref: mcu
+          shift: [-mcu_y/2 -10, 8.5]
+      # logo:
+      #   what: ceoloide/utility_ergogen_logo
+      #   where:
+      #     ref: mcu
+      #     shift: [-mcu_y/2 -20, 0]
+      # url:
+      #   what: ceoloide/utility_text
+      #   params:
+      #     text: *kb_url
+      #     reversible: true
+      #   adjust:
+      #     shift: [0,-6]
+      #   where: 
+      #     - [key, -1_5u, space]
+      # version:
+      #   what: ceoloide/utility_text
+      #   params:
+      #     text: *kb_version
+      #   adjust:
+      #     shift: [0,-6]
+      #   where: 
+      #     ref: mcu
+      #     shift: [-mcu_y/2 -22,  -2]
+      jlc:
+        what: ceoloide/utility_text
+        params:
+          text: JLCJLCJLCJLC
+          side: F
+        adjust:
+          shift: [0, 10]
+        where: 
+          - [key, -1_5u, space]
+
+  right_pcb:
+    template: kicad8
+    outlines:
+      right:
+        outline: r_pcb_outline
+    footprints:
+      choc:
+        what: ceoloide/switch_choc_v1_v2
+        where:
+          - [/^mirror.*/, key, -1_5u, -space]
+          - /rightcluster_.*/
+        
+        params:
+          include_keycap: true
+          choc_v2_support: false
+          #solder: true
+          reversible: false
+          hotswap: true
+          keycap_width: 16.5
+          keycap_height: 16.5
+          from: "{{colrow}}"
+          to: "{{column_net}}"
+      choc_space:
+        what: ceoloide/switch_choc_v1_v2
+        where: 
+          - [/^mirror.*/, key, -1_5u, space]
+        params:
+          include_keycap: true
+          choc_v2_support: false
+          #solder: true
+          reversible: false
+          hotswap: true
+          keycap_width: keycap_x_space
+          keycap_height: 16.5
+          from: "{{colrow}}"
+          to: "{{column_net}}"
+      diode:
+        what: ceoloide/diode_tht_sod123
+        where:
+          - [/^mirror.*/, key]
+          - /rightcluster_.*/
+        params:
+          from: "{{colrow}}"
+          to: "{{row_net}}"
+          side: F
+          include_tht: false
+          reversible: false
+        adjust:
+          shift: [horizontal_diode_shift,vertical_diode_shift]
+          rotate: 90 + diode_rotation
+
+      # Controller Area
+      promicro:
+        what: ceoloide/mcu_nice_nano
+        params:
+          reverse_mount: true
+          include_extra_pins: true
+          # Pin Assignments (Controller on top facing down)
+          # Right Side
+          P0: "DPD" # Display Data
+          P1: "DPC" # Display Clock
+          # GND
+          # GND
+          P2: "DPE" # Display CS (nice!view only) FIXME? ZPM default?
+          P3: "R2" # Row
+          P4: "R3" # Row
+          P5: "R4" # Row
+          P6: "R5" # Row
+          P7: "R5" # Row
+          P8: "R6" # Row
+          P9: "R7" # Row
+
+          # Left Side
+          # RAW:      # Battery Pos
+          # GND       # Ground / Battery Neg
+          # RST       # Reset pin
+          # VCC       # External Power
+          P21: "C1" # Column
+          P20: "C2" # Column
+          P19: "C3" # Column
+          P18: "C4" # Column
+          P15: "C5" # Column
+          P14: "C6" # Column
+          P16: "C7" # Column
+          # P10: "C7" # Column
+        adjust:
+          rotate: 270
+        where:
+          ref: mirror_mcu
+
+      display:
+        what: ceoloide/display_nice_view
+        params:
+          MOSI: DPD
+          SCK: DPC
+          CS: DPE
+        adjust:
+          rotate: 270
+        where:
+          ref: mirror_mcu
+          shift: [-1.50, 0] # Move the display down a bit to be sure the cable fits between the headers
+      pads_bat:
+        what: ceoloide/battery_connector_jst_ph_2
+        params:
+        where:
+          ref: mirror_mcu
+          shift: [-mcu_y/2 -7,-7]
+          rotate: 180
+      reset:
+        what: ceoloide/reset_switch_tht_top
+        params:
+          side: B
+          from: GND
+          to: RST
+        adjust:
+          rotate: 90
+        where:
+          ref: mirror_mcu
+          shift: [-mcu_y/2 -14, -0]
+      power:
+        what: ceoloide/power_switch_smd_side
+        params:
+          side: B
+          #          from: GND
+          #          to: RST
+        adjust:
+          rotate: 270
+        where:
+          ref: mirror_mcu
+          shift: [-mcu_y/2 -10, 8.5]
+      url:
+        what: ceoloide/utility_text
+        params:
+          text: *kb_url
+          reversible: true
+        adjust:
+          shift: [0,-6]
+        where: 
+          - [/^mirror.*/, key, -1_5u, space]
+
+      jlc:
+        what: ceoloide/utility_text
+        params:
+          text: JLCJLCJLCJLC
+          side: F
+        adjust:
+          shift: [0, 10]
+        where: 
+          - [/^mirror.*/, key, -1_5u, space]
+      # logo:
+      #   what: ceoloide/utility_ergogen_logo
+      #   where:
+      #     ref: mirror_mcu
+      #     shift: [-mcu_y/2 -20, 0]
+      # version:
+      #   what: ceoloide/utility_text
+      #   params:
+      #     text: *kb_version
+      #   adjust:
+      #     shift: [0,-6]
+      #   where: 
+      #     ref: mirror_mcu
+      #     shift: [-mcu_y/2 -22,  -2]
